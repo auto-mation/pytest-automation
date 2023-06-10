@@ -1,0 +1,8 @@
+.history/
+.myenv
+logs
+assets
+.pytest_cache
+__pycache__
+report.html
+geckodriver.log
