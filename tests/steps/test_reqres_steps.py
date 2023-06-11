@@ -47,3 +47,13 @@ def validate_response_keyvalue(param, value):
 def send_list_users_req():
     LOGGER.info("user send list users request") 
     api.list_users() 
+
+@then(parsers.cfparse('user validate return data object from list users'))
+def validate_response_keyvalue():
+    LOGGER.info("user validate return data object from list users")   
+    json_response = api.get_reponse().json()  
+    data = json_response['data']
+    assert len(data) > 0, "users not list ine data object"
+    LOGGER.info("List user data object keys are {}".format(data[0].keys()))
+    for key in ['id', 'email', 'first_name', 'last_name', 'avatar']:
+        assert key in data[0].keys() 

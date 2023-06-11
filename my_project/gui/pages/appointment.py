@@ -58,7 +58,6 @@ class AppointmentPage (MainPage):
         elem.send_keys(comment)
         
     def click_book(self): 
-        elem = self.get_element_xpath(self.__ELEMENTS_XPATH_LOCATORS['book-btn']) 
-        elem.submit()
+        elem = self.get_element_xpath(self.__ELEMENTS_XPATH_LOCATORS['book-btn'])
         elem.click()
         self.wait_booking_loading()

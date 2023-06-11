@@ -18,9 +18,11 @@ REM Activate the virtual environment
 call myenv\Scripts\activate.bat
 
 REM Install pytest and pytest-bdd
-python -m pip install pytest pytest-html pytest-bdd selenium requests
+python -m pip install pytest pytest-html pytest-bdd selenium requests webdriver-manager
 
 python -m pip freeze > requirements.txt
+
+@REM python ./runner.py --browser=firefox
 
 REM Deactivate the virtual environment
 call deactivate.bat

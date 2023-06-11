@@ -2,8 +2,14 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as EC 
+from selenium.webdriver.firefox.service import Service as firefox_Service
+from selenium.webdriver.chrome.service import Service as chrome_Service 
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
+
 import logging
+from selenium import webdriver
 LOGGER = logging.getLogger(__name__)
 
 class BaseDriver():
@@ -15,12 +21,14 @@ class BaseDriver():
         if driver:
             self.__DRIVER = driver
      
-    def initiate_browser(self, browser_name : str):  
+    def initiate_browser(self, browser_name : str): 
         LOGGER.info(f"Starting browser with anme : {browser_name}")
         if browser_name == "chrome":
-            self.__DRIVER = webdriver.Chrome()
-        elif browser_name == "firefox":
-            self.__DRIVER = webdriver.Firefox()
+            service = chrome_Service(executable_path= ChromeDriverManager().install())
+            self.__DRIVER = webdriver.Chrome(service=service) 
+        elif browser_name == "firefox":  
+            service = firefox_Service(executable_path= GeckoDriverManager().install())
+            self.__DRIVER = webdriver.Firefox(service=service) 
         elif browser_name == "edge":
             self.__DRIVER = webdriver.Edge()    
         else:
@@ -42,3 +50,4 @@ class BaseDriver():
         wait.until(EC.presence_of_element_located(by))
         wait.until(EC.visibility_of_element_located(by))
         
+       

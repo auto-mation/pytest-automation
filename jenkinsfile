@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparation') {
+            steps { 
+                git https://github.com/auto-mation/pytest-automation.git
+            }
+        }
+        stage('Run Automation Scripts') {
+            parallel {
+                stage('API Automation') {
+                    steps {
+                        // Execute your API automation script
+                        sh 'python3 api_automation_script.py'
+                    }
+                }
+                stage('GUI Automation') {
+                    steps {
+                        // Execute your GUI automation script
+                        sh 'python3 gui_automation_script.py'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            // Archive the results, logs, or any other artifacts
+            archiveArtifacts artifacts: '**/target/*.log', fingerprint: true
+        }
+    }
+}
