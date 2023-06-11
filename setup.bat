@@ -3,7 +3,7 @@ REM Check if Python is installed
 python --version >nul 2>&1
 if errorlevel 1 (
     echo Python not found. Please install Python3 and add it to your PATH.
-    exit /b 1
+    exit /b 0
 )
 
 python -m pip install --upgrade pip

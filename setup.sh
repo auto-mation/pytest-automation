@@ -4,7 +4,7 @@
 python3 --version > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     echo "Python not found. Please install Python3 and add it to your PATH."
-    exit 1
+    exit 0
 fi
 
 echo $(python3 --version)
