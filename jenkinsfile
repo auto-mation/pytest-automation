@@ -27,10 +27,10 @@ pipeline {
                 }
                 stage('GUI Automation') {
                     steps { 
-                        sh '''#!/bin/bash
-                        source myenv/bin/activate
-                        python ./runner.py -m gui --browser=${params.BROWSER}
-                        '''
+                       sh """#!/bin/bash
+                        source ./myenv/bin/activate
+                        python 
+                        """
                     }
                 }
             }
