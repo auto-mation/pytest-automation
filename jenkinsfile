@@ -12,7 +12,6 @@ pipeline {
                  sh('''  
                     chmod +x ./setup.sh
                     ./setup.sh 
-                    source ./myenv/bin/activate
                 ''')
             }
         }
@@ -20,12 +19,18 @@ pipeline {
             parallel {
                 stage('API Automation') {
                     steps { 
-                        sh 'python ./runner.py -m api'
+                         sh '''#!/bin/bash
+                        source myenv/bin/activate
+                        python ./runner.py -m api
+                        '''
                     }
                 }
                 stage('GUI Automation') {
                     steps { 
-                        sh 'python ./runner.py -m gui --browser=${params.BROWSER}'
+                        sh '''#!/bin/bash
+                        source myenv/bin/activate
+                        python ./runner.py -m gui --browser=${params.BROWSER}
+                        '''
                     }
                 }
             }
