@@ -1,24 +1,31 @@
-pipeline {
-    agent any
 
+pipeline {
+ 	agent {
+        label 'qa-regression-sm'
+    }
+    parameters {
+            choice(name: 'BROWSER', choices: ['chrome', 'firefox', 'safari'], description: 'Targeted browser for GUI tests')
+        }
     stages {
         stage('Preparation') {
             steps { 
-                git https://github.com/auto-mation/pytest-automation.git
+                 sh('''  
+                    chmod +x ./setup.sh
+                    ./setup.sh 
+                    source ./myenv/bin/activate
+                ''')
             }
         }
-        stage('Run Automation Scripts') {
+        stage('Automation Scripts') {
             parallel {
                 stage('API Automation') {
-                    steps {
-                        // Execute your API automation script
-                        sh 'python3 api_automation_script.py'
+                    steps { 
+                        sh 'python ./runner.py -m api'
                     }
                 }
                 stage('GUI Automation') {
-                    steps {
-                        // Execute your GUI automation script
-                        sh 'python3 gui_automation_script.py'
+                    steps { 
+                        sh 'python ./runner.py -m gui --browser=${params.BROWSER}'
                     }
                 }
             }
@@ -26,8 +33,16 @@ pipeline {
     }
     post {
         always {
-            // Archive the results, logs, or any other artifacts
             archiveArtifacts artifacts: '**/target/*.log', fingerprint: true
+
+            cleanWs()
         }
+        failure {
+            emailext (
+                subject: "Jenkins Pipeline Failure: ${env.JOB_NAME}",
+                body: "The pipeline '${env.JOB_NAME}' has failed. Please check the build logs at ${env.BUILD_URL}.",
+                to: 'your-email@example.com'
+            )
     }
+}
 }
